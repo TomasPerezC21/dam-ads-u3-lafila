@@ -188,6 +188,17 @@ public class ClubDeportivo {
         }
     }
 
+    public List<Socio> getSocios() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Socio> query = em.createQuery("SELECT s FROM Socio s", Socio.class);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+
+    }
+
 
 
 
