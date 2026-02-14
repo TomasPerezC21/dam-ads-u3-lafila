@@ -45,26 +45,10 @@ public class ReservaFormView extends GridPane {
         add(crear, 1, 7);
 
         crear.setOnAction(e -> {
-
             try {
 
-                if (id.getText().isEmpty()) {
-                    showError("El ID de la reserva es obligatorio");
-                    return;
-                }
-
-                if (idSocio.getValue() == null) {
-                    showError("Selecciona un socio");
-                    return;
-                }
-
-                if (idPista.getValue() == null) {
-                    showError("Selecciona una pista");
-                    return;
-                }
-
-                if (fecha.getValue() == null) {
-                    showError("Selecciona una fecha");
+                if (idSocio.getValue() == null || idPista.getValue() == null || fecha.getValue() == null) {
+                    showError("Faltan datos obligatorios");
                     return;
                 }
 
@@ -72,33 +56,27 @@ public class ReservaFormView extends GridPane {
 
                 Reserva reserva = new Reserva(
                         id.getText(),
-                        idSocio.getValue(),
-                        idPista.getValue(),
+                        idSocio.getValue(),     // Socio
+                        idPista.getValue(),     // Pista
                         fecha.getValue(),
                         horaInicio,
-                        duracion.getValue()
+                        Double.parseDouble(precio.getText())   // ESTE es el último parámetro correcto
                 );
 
                 club.crearReserva(reserva);
 
                 showInfo("Reserva creada correctamente");
 
-                // limpiar formulario
                 id.clear();
                 idSocio.setValue(null);
                 idPista.setValue(null);
-                fecha.setValue(LocalDate.now());
-                hora.setText("10:00");
-                duracion.getValueFactory().setValue(60);
-                precio.setText("10.0");
+                fecha.setValue(null);
+                hora.clear();
+                precio.clear();
 
-            }
-            catch (Exception ex) {
-
+            } catch (Exception ex) {
                 showError(ex.getMessage());
-
             }
-
         });
 
     }
