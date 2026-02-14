@@ -11,7 +11,7 @@ public class ClubDeportivo {
     private EntityManagerFactory emf;
 
     public ClubDeportivo() {
-        emf = Persistence.createEntityManagerFactory("clubDamaPU");
+        emf = Persistence.createEntityManagerFactory("ejemplopersistenciaJPA");
     }
 
     public EntityManager getEntityManager() {
