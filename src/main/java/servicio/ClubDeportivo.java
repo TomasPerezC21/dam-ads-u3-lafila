@@ -24,47 +24,126 @@ public class ClubDeportivo {
         }
     }
 
-    public void altaSocio(Socio socio) {
+    // ---------------- SOCIOS ----------------
+
+    public void altaSocio(Socio socio) throws Exception {
 
         EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
 
         try {
-            tx.begin();
-            em.persist(socio);
-            tx.commit();
-            em.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-
-    }
-
-
-    public void altaPista(Pista pista) throws Exception {
-        EntityManager em = emf.createEntityManager();
-        try {
             em.getTransaction().begin();
 
-            // comprobar si ya existe
-            Pista existente = em.find(Pista.class, pista.getIdPista());
+            Socio existente = em.find(Socio.class, socio.getIdSocio());
 
             if (existente != null) {
-                throw new Exception("Ya existe una pista con ese ID");
+                throw new Exception("Ya existe un socio con ese ID");
             }
-            em.persist(pista);
+
+            em.persist(socio);
+
             em.getTransaction().commit();
 
         } catch (Exception e) {
+
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
+
             throw e;
-        }finally {
+
+        } finally {
+
             em.close();
+
         }
     }
 
-    public void cambiarDisponibilidadPista(int idPista, boolean disponible) throws Exception {
+    public boolean bajaSocio(String idSocio) throws Exception {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            em.getTransaction().begin();
+
+            Socio socio = em.find(Socio.class, idSocio);
+
+            if (socio == null)
+                return false;
+
+            if (socio.getReservas() != null && !socio.getReservas().isEmpty())
+                throw new Exception("No se puede eliminar el socio porque tiene reservas");
+
+            em.remove(socio);
+
+            em.getTransaction().commit();
+
+            return true;
+
+        } catch (Exception e) {
+
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
+
+            throw e;
+
+        } finally {
+
+            em.close();
+
+        }
+    }
+
+    public List<Socio> getSocios() {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            return em.createQuery("SELECT s FROM Socio s", Socio.class)
+                    .getResultList();
+
+        } finally {
+
+            em.close();
+
+        }
+    }
+
+    // ---------------- PISTAS ----------------
+
+    public void altaPista(Pista pista) throws Exception {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            em.getTransaction().begin();
+
+            Pista existente = em.find(Pista.class, pista.getIdPista());
+
+            if (existente != null)
+                throw new Exception("Ya existe una pista con ese ID");
+
+            em.persist(pista);
+
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
+
+            throw e;
+
+        } finally {
+
+            em.close();
+
+        }
+    }
+
+    public boolean cambiarDisponibilidadPista(String idPista, boolean disponible) throws Exception {
 
         EntityManager em = emf.createEntityManager();
 
@@ -74,17 +153,19 @@ public class ClubDeportivo {
 
             Pista pista = em.find(Pista.class, idPista);
 
-            if (pista == null) {
-                throw new Exception("La pista no existe");
-            }
+            if (pista == null)
+                return false;
 
             pista.setDisponible(disponible);
 
-            em.merge(pista);
-
             em.getTransaction().commit();
 
+            return true;
+
         } catch (Exception e) {
+
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
 
             throw e;
 
@@ -93,8 +174,25 @@ public class ClubDeportivo {
             em.close();
 
         }
-
     }
+
+    public List<Pista> getPistas() {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            return em.createQuery("SELECT p FROM Pista p", Pista.class)
+                    .getResultList();
+
+        } finally {
+
+            em.close();
+
+        }
+    }
+
+    // ---------------- RESERVAS ----------------
 
     public void crearReserva(Reserva reserva) throws Exception {
 
@@ -104,26 +202,19 @@ public class ClubDeportivo {
 
             em.getTransaction().begin();
 
-            // comprobar que el socio existe
-            Socio socio = em.find(Socio.class, reserva.getIdSocio().getDni());
+            Socio socio = em.find(Socio.class, reserva.getIdSocio().getIdSocio());
 
-            if (socio == null) {
+            if (socio == null)
                 throw new Exception("El socio no existe");
-            }
 
-            // comprobar que la pista existe
             Pista pista = em.find(Pista.class, reserva.getIdPista().getIdPista());
 
-            if (pista == null) {
+            if (pista == null)
                 throw new Exception("La pista no existe");
-            }
 
-            // comprobar disponibilidad
-            if (!pista.getDisponible()) {
+            if (!pista.getDisponible())
                 throw new Exception("La pista no está disponible");
-            }
 
-            // asociar entidades gestionadas
             reserva.setIdSocio(socio);
             reserva.setIdPista(pista);
 
@@ -133,6 +224,9 @@ public class ClubDeportivo {
 
         } catch (Exception e) {
 
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
+
             throw e;
 
         } finally {
@@ -140,84 +234,40 @@ public class ClubDeportivo {
             em.close();
 
         }
-
     }
 
-    public void cancelarReserva(int idReserva) throws Exception {
+    public boolean cancelarReserva(String idReserva) throws Exception {
 
         EntityManager em = emf.createEntityManager();
 
         try {
+
             em.getTransaction().begin();
+
             Reserva reserva = em.find(Reserva.class, idReserva);
 
-            if (reserva == null) {
-                throw new Exception("La reserva no existe");
-            }
+            if (reserva == null)
+                return false;
+
             em.remove(reserva);
+
             em.getTransaction().commit();
 
+            return true;
+
         } catch (Exception e) {
+
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
+
             throw e;
 
         } finally {
-            em.close();
-        }
-
-    }
-    public void bajaSocio(String dni) throws Exception {
-
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            em.getTransaction().begin();
-            Socio socio = em.find(Socio.class, dni);
-            if (socio == null) {
-                throw new Exception("El socio no existe");
-            }
-            // comprobar si tiene reservas
-            if (socio.getReservas() != null && !socio.getReservas().isEmpty()) {
-                throw new Exception("No se puede eliminar el socio porque tiene reservas");
-            }
-            em.remove(socio);
-            em.getTransaction().commit();
-            em.close();
-        } catch (Exception e) {
-            throw e;
-
-        }
-    }
-
-    public List<Socio> getSocios() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<Socio> query = em.createQuery("SELECT s FROM Socio s", Socio.class);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
-
-    }
-
-    public List<Pista> getPistas() {
-
-        EntityManager em = emf.createEntityManager();
-
-        try {
-
-            TypedQuery<Pista> query =
-                    em.createQuery("SELECT p FROM Pista p", Pista.class);
-
-            return query.getResultList();
-
-        } finally {
 
             em.close();
 
         }
-
     }
-
 
     public List<Reserva> getReservas() {
 
@@ -225,26 +275,17 @@ public class ClubDeportivo {
 
         try {
 
-            TypedQuery<Reserva> query =
-                    em.createQuery(
+            return em.createQuery(
                             "SELECT r FROM Reserva r " +
                                     "JOIN FETCH r.idSocio " +
                                     "JOIN FETCH r.idPista",
-                            Reserva.class
-                    );
-
-            return query.getResultList();
+                            Reserva.class)
+                    .getResultList();
 
         } finally {
 
             em.close();
 
         }
-
     }
-
-
-
-
-
 }

@@ -32,7 +32,7 @@ public class DashboardView extends BorderPane {
         TableColumn<Pista, String> p2 = new TableColumn<>("Deporte");
         p2.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(p.getValue().getDeporte()));
         TableColumn<Pista, String> p3 = new TableColumn<>("Disponible");
-       p3.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(String.valueOf(p.getValue().isDisponible())));
+       p3.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(String.valueOf(p.getValue().getDisponible())));
         tablaPistas.getColumns().addAll(p1, p2, p3);
         tablaPistas.getItems().addAll(club.getPistas());
 
@@ -40,9 +40,9 @@ public class DashboardView extends BorderPane {
         TableColumn<Reserva, String> r1 = new TableColumn<>("ID");
         r1.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(p.getValue().getIdReserva()));
         TableColumn<Reserva, String> r2 = new TableColumn<>("Socio");
-        r2.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(p.getValue().getIdSocio()));
+        r2.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(p.getValue().getIdSocio().getIdSocio()));
         TableColumn<Reserva, String> r3 = new TableColumn<>("Pista");
-        r3.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(p.getValue().getIdPista()));
+        r3.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(p.getValue().getIdPista().getIdPista()));
         TableColumn<Reserva, String> r4 = new TableColumn<>("Fecha");
         r4.setCellValueFactory(p -> new javafx.beans.property.SimpleStringProperty(p.getValue().getFecha().toString()));
         TableColumn<Reserva, String> r5 = new TableColumn<>("Inicio");

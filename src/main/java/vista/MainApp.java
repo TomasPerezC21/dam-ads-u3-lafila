@@ -41,7 +41,7 @@ public class MainApp extends Application {
         try {
             club = new ClubDeportivo();
             showInfo("Conectado");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             showError("Error de conexion: " + e.getMessage());
         }
 
@@ -128,7 +128,7 @@ public class MainApp extends Application {
          */
         salir.setOnAction(e -> {
             try {
-                club.cerrarConexion();
+                club.cerrar();
             } catch (Exception ignored) {
             }
             Platform.exit();
