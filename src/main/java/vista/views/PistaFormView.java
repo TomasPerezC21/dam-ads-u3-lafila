@@ -35,7 +35,6 @@ public class PistaFormView extends GridPane {
 
                 else showInfo("Error al dar de alta la pista.");
 
-
                 // Limpiar el formulario para permitir añadir otra pista sin borrar a mano
                 id.clear();
                 deporte.clear();
