@@ -33,7 +33,6 @@ public class Socio {
     public Socio() {
     }
 
-    // CONSTRUCTOR COMPLETO (el que usa tu formulario)
     public Socio(String idSocio, String dni, String nombre, String apellidos, String telefono, String email) {
         this.idSocio = idSocio;
         this.dni = dni;
