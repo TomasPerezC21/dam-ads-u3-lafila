@@ -10,7 +10,7 @@ import java.time.LocalTime;
 public class Reserva {
 
     @Id
-    @Column(name = "id_reserva", nullable = false, length = 36)
+    @Column(name = "id_reserva")
     private String idReserva;
 
     @ManyToOne
@@ -21,21 +21,21 @@ public class Reserva {
     @JoinColumn(name = "id_pista")
     private Pista idPista;
 
-    @Column(name = "fecha")
     private LocalDate fecha;
 
     @Column(name = "hora_inicio")
     private LocalTime horaInicio;
 
     @Column(name = "duracion_min")
-    private Integer duracionMin;
+    private int duracionMin;
 
-    // CONSTRUCTOR VACÍO
+    private double precio;
+
     public Reserva() {}
 
-    // CONSTRUCTOR COMPLETO
     public Reserva(String idReserva, Socio socio, Pista pista,
-                   LocalDate fecha, LocalTime horaInicio, Integer duracionMin) {
+                   LocalDate fecha, LocalTime horaInicio,
+                   int duracionMin, double precio) {
 
         this.idReserva = idReserva;
         this.idSocio = socio;
@@ -43,60 +43,20 @@ public class Reserva {
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.duracionMin = duracionMin;
+        this.precio = precio;
     }
 
-    // GETTERS Y SETTERS
+    public String getIdReserva() { return idReserva; }
 
-    public String getIdReserva() {
-        return idReserva;
-    }
+    public Socio getIdSocio() { return idSocio; }
 
-    public void setIdReserva(String idReserva) {
-        this.idReserva = idReserva;
-    }
+    public Pista getIdPista() { return idPista; }
 
-    public Socio getIdSocio() {
-        return idSocio;
-    }
+    public LocalDate getFecha() { return fecha; }
 
-    public void setIdSocio(Socio idSocio) {
-        this.idSocio = idSocio;
-    }
+    public LocalTime getHoraInicio() { return horaInicio; }
 
-    public Pista getIdPista() {
-        return idPista;
-    }
+    public int getDuracionMin() { return duracionMin; }
 
-    public void setIdPista(Pista idPista) {
-        this.idPista = idPista;
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public LocalTime getHoraInicio() {
-        return horaInicio;
-    }
-
-    public void setHoraInicio(LocalTime horaInicio) {
-        this.horaInicio = horaInicio;
-    }
-
-    public Integer getDuracionMin() {
-        return duracionMin;
-    }
-
-    public void setDuracionMin(Integer duracionMin) {
-        this.duracionMin = duracionMin;
-    }
-
-    @Override
-    public String toString() {
-        return idReserva + " - " + idSocio.getNombre() + " - " + idPista.getDeporte();
-    }
+    public double getPrecio() { return precio; }
 }
