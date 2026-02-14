@@ -3,6 +3,8 @@ package Entidades;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.List;
+
 @Entity
 @Table(name = "pistas", schema = "club_dama")
 public class Pista {
@@ -20,6 +22,10 @@ public class Pista {
     @ColumnDefault("1")
     @Column(name = "disponible", nullable = false)
     private Boolean disponible = false;
+
+    @OneToMany(mappedBy = "idPista", cascade = CascadeType.ALL)
+
+    private List<Reserva> reservas;
 
     public String getIdPista() {
         return idPista;

@@ -1,6 +1,6 @@
 package vista;
 
-import modelo.*;
+import Entidades.*;
 import servicio.ClubDeportivo;
 import vista.views.*;
 import javafx.application.Application;
@@ -22,6 +22,7 @@ import java.sql.SQLException;
  *
  */
 public class MainApp extends Application {
+
 
     private ClubDeportivo club;
     private BorderPane root;

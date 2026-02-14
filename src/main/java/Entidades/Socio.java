@@ -1,9 +1,8 @@
 package Entidades;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "socios", schema = "club_dama")
@@ -26,6 +25,10 @@ public class Socio {
 
     @Column(name = "email", length = 120)
     private String email;
+
+    @OneToMany(mappedBy = "idSocio", cascade = CascadeType.ALL)
+
+    private List<Reserva> reservas;
 
     public String getIdSocio() {
         return idSocio;
