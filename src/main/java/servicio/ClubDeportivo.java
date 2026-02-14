@@ -199,7 +199,24 @@ public class ClubDeportivo {
 
     }
 
+    public List<Pista> getPistas() {
 
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            TypedQuery<Pista> query =
+                    em.createQuery("SELECT p FROM Pista p", Pista.class);
+
+            return query.getResultList();
+
+        } finally {
+
+            em.close();
+
+        }
+
+    }
 
 
 
