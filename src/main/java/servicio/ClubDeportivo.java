@@ -96,4 +96,51 @@ public class ClubDeportivo {
 
     }
 
+    public void crearReserva(Reserva reserva) throws Exception {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            em.getTransaction().begin();
+
+            // comprobar que el socio existe
+            Socio socio = em.find(Socio.class, reserva.getIdSocio().getDni());
+
+            if (socio == null) {
+                throw new Exception("El socio no existe");
+            }
+
+            // comprobar que la pista existe
+            Pista pista = em.find(Pista.class, reserva.getIdPista().getIdPista());
+
+            if (pista == null) {
+                throw new Exception("La pista no existe");
+            }
+
+            // comprobar disponibilidad
+            if (!pista.getDisponible()) {
+                throw new Exception("La pista no está disponible");
+            }
+
+            // asociar entidades gestionadas
+            reserva.setIdSocio(socio);
+            reserva.setIdPista(pista);
+
+            em.persist(reserva);
+
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+
+            throw e;
+
+        } finally {
+
+            em.close();
+
+        }
+
+    }
+
 }
