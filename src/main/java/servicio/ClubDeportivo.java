@@ -143,4 +143,27 @@ public class ClubDeportivo {
 
     }
 
+    public void cancelarReserva(int idReserva) throws Exception {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            Reserva reserva = em.find(Reserva.class, idReserva);
+
+            if (reserva == null) {
+                throw new Exception("La reserva no existe");
+            }
+            em.remove(reserva);
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+            throw e;
+
+        } finally {
+            em.close();
+        }
+
+    }
+
 }
