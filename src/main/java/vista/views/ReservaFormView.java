@@ -9,97 +9,114 @@ import javafx.scene.layout.GridPane;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 public class ReservaFormView extends GridPane {
+
     public ReservaFormView(ClubDeportivo club) {
+
         setPadding(new Insets(12));
-        setHgap(8); setVgap(8);
+        setHgap(8);
+        setVgap(8);
 
         TextField id = new TextField();
-        ComboBox<Socio> idSocio = new ComboBox();
 
-        if (club.getSocios() != null) {
-            idSocio.getItems().addAll(club.getSocios());
-        }
+        ComboBox<Socio> idSocio = new ComboBox<>();
+        idSocio.getItems().addAll(club.getSocios());
 
-        ComboBox<Pista> idPista = new ComboBox();
-
-        if (club.getPistas() != null) {
-            idPista.getItems().addAll(club.getPistas());
-        }
+        ComboBox<Pista> idPista = new ComboBox<>();
+        idPista.getItems().addAll(club.getPistas());
 
         DatePicker fecha = new DatePicker(LocalDate.now());
+
         TextField hora = new TextField("10:00");
+
         Spinner<Integer> duracion = new Spinner<>(30, 300, 60, 30);
-        TextField precio = new TextField("10.0");
+
+        TextField precio = new TextField("10.0"); // opcional, no se usa en entidad
+
         Button crear = new Button("Reservar");
 
-        addRow(0, new Label("idReserva*"), id);
+        addRow(0, new Label("ID Reserva*"), id);
         addRow(1, new Label("Socio*"), idSocio);
         addRow(2, new Label("Pista*"), idPista);
         addRow(3, new Label("Fecha*"), fecha);
-        addRow(4, new Label("Hora inicio* (HH:mm)"), hora);
-        addRow(5, new Label("Duración (min)"), duracion);
+        addRow(4, new Label("Hora inicio (HH:mm)*"), hora);
+        addRow(5, new Label("Duración (min)*"), duracion);
         addRow(6, new Label("Precio (€)"), precio);
         add(crear, 1, 7);
 
         crear.setOnAction(e -> {
+
             try {
-                // 1. Validaciones de seguridad para evitar el NullPointerException
-                if (idSocio.getValue() == null || idPista.getValue() == null || fecha.getValue() == null) {
-                    showError("Faltan datos: Debes seleccionar Socio, Pista y Fecha.");
+
+                if (id.getText().isEmpty()) {
+                    showError("El ID de la reserva es obligatorio");
                     return;
                 }
 
-                // 2. Parseo de la hora (Si el formato está mal, saltará al catch)
-                LocalTime t = LocalTime.parse(hora.getText());
-
-                // 3. Crear la reserva
-                Reserva r = new Reserva(
-                        id.getText(),
-                        idSocio.getValue().getIdSocio(),
-                        idPista.getValue().getIdPista(),
-                        fecha.getValue(),
-                        t,
-                        duracion.getValue(),
-                        Double.parseDouble(precio.getText())
-                );
-
-                boolean ok = club.crearReserva(r);
-
-                if (ok) {
-                    showInfo("Reserva realizada correctamente.");
-
-                    // 4. Limpiar campos
-                    id.clear();
-                    idSocio.setValue(null);
-                    idPista.setValue(null);
-                    fecha.setValue(null);
-                    hora.clear();
-                    precio.clear();
-
-                } else {
-                    showError("Error al crear Reserva (quizás ID repetido o pista ocupada).");
+                if (idSocio.getValue() == null) {
+                    showError("Selecciona un socio");
+                    return;
                 }
 
-            } catch (java.time.format.DateTimeParseException dtpe) {
-                showError("El formato de la hora debe ser HH:mm (ej: 14:30)");
-            } catch (NumberFormatException nfe) {
-                showError("El precio debe ser un número válido.");
-            } catch (Exception ex) {
-                showError("Error inesperado: " + ex.getMessage());
+                if (idPista.getValue() == null) {
+                    showError("Selecciona una pista");
+                    return;
+                }
+
+                if (fecha.getValue() == null) {
+                    showError("Selecciona una fecha");
+                    return;
+                }
+
+                LocalTime horaInicio = LocalTime.parse(hora.getText());
+
+                Reserva reserva = new Reserva(
+                        id.getText(),
+                        idSocio.getValue(),
+                        idPista.getValue(),
+                        fecha.getValue(),
+                        horaInicio,
+                        duracion.getValue()
+                );
+
+                club.crearReserva(reserva);
+
+                showInfo("Reserva creada correctamente");
+
+                // limpiar formulario
+                id.clear();
+                idSocio.setValue(null);
+                idPista.setValue(null);
+                fecha.setValue(LocalDate.now());
+                hora.setText("10:00");
+                duracion.getValueFactory().setValue(60);
+                precio.setText("10.0");
+
             }
+            catch (Exception ex) {
+
+                showError(ex.getMessage());
+
+            }
+
         });
+
     }
 
     private void showError(String msg) {
+
         Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         a.setHeaderText("Error");
         a.showAndWait();
+
     }
+
     private void showInfo(String msg) {
+
         Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
         a.setHeaderText(null);
         a.showAndWait();
+
     }
+
 }
