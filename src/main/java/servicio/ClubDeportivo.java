@@ -64,4 +64,36 @@ public class ClubDeportivo {
         }
     }
 
+    public void cambiarDisponibilidadPista(int idPista, boolean disponible) throws Exception {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            em.getTransaction().begin();
+
+            Pista pista = em.find(Pista.class, idPista);
+
+            if (pista == null) {
+                throw new Exception("La pista no existe");
+            }
+
+            pista.setDisponible(disponible);
+
+            em.merge(pista);
+
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+
+            throw e;
+
+        } finally {
+
+            em.close();
+
+        }
+
+    }
+
 }
