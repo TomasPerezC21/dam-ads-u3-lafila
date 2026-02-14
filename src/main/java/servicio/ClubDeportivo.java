@@ -219,6 +219,31 @@ public class ClubDeportivo {
     }
 
 
+    public List<Reserva> getReservas() {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            TypedQuery<Reserva> query =
+                    em.createQuery(
+                            "SELECT r FROM Reserva r " +
+                                    "JOIN FETCH r.idSocio " +
+                                    "JOIN FETCH r.idPista",
+                            Reserva.class
+                    );
+
+            return query.getResultList();
+
+        } finally {
+
+            em.close();
+
+        }
+
+    }
+
+
 
 
 
