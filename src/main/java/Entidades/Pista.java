@@ -1,31 +1,40 @@
 package Entidades;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
-
 import java.util.List;
 
 @Entity
 @Table(name = "pistas", schema = "club_dama")
 public class Pista {
+
     @Id
     @Column(name = "id_pista", nullable = false, length = 36)
     private String idPista;
 
-    @Lob
-    @Column(name = "deporte", nullable = false)
+    @Column(name = "deporte", nullable = false, length = 80)
     private String deporte;
 
-    @Column(name = "descripcion", length = 200)
+    @Column(name = "descripcion", length = 120)
     private String descripcion;
 
-    @ColumnDefault("1")
-    @Column(name = "disponible", nullable = false)
-    private Boolean disponible = false;
+    @Column(name = "disponible")
+    private Boolean disponible;
 
-    @OneToMany(mappedBy = "idPista", cascade = CascadeType.ALL)
-
+    @OneToMany(mappedBy = "idPista")
     private List<Reserva> reservas;
+
+    // CONSTRUCTOR VACÍO
+    public Pista() {}
+
+    // CONSTRUCTOR COMPLETO
+    public Pista(String idPista, String deporte, String descripcion, Boolean disponible) {
+        this.idPista = idPista;
+        this.deporte = deporte;
+        this.descripcion = descripcion;
+        this.disponible = disponible;
+    }
+
+    // GETTERS Y SETTERS
 
     public String getIdPista() {
         return idPista;
@@ -59,4 +68,16 @@ public class Pista {
         this.disponible = disponible;
     }
 
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+
+    @Override
+    public String toString() {
+        return deporte + " (" + idPista + ")";
+    }
 }
