@@ -9,51 +9,78 @@ import javafx.scene.layout.GridPane;
 import java.util.function.Consumer;
 
 public class PistaFormView extends GridPane {
+
     public PistaFormView(ClubDeportivo club) {
+
         setPadding(new Insets(12));
-        setHgap(8); setVgap(8);
+        setHgap(8);
+        setVgap(8);
 
         TextField id = new TextField();
         TextField deporte = new TextField();
         TextField descripcion = new TextField();
         CheckBox disponible = new CheckBox("Disponible");
+
         Button crear = new Button("Crear");
 
-        addRow(0, new Label("idPista*"), id);
+        addRow(0, new Label("ID Pista*"), id);
         addRow(1, new Label("Deporte"), deporte);
         addRow(2, new Label("Descripción"), descripcion);
         addRow(3, new Label("Operativa"), disponible);
+
         add(crear, 1, 4);
 
         crear.setOnAction(e -> {
+
             try {
 
-                boolean ok = club.altaPista(new Pista(id.getText(), deporte.getText(), descripcion.getText(), disponible.isSelected()));
+                if (id.getText().isEmpty()) {
+                    showError("El ID es obligatorio");
+                    return;
+                }
 
-                // Feedback para el usuario
-                if (ok)showInfo("Pista creada correctamente");
+                Pista pista = new Pista(
+                        id.getText(),
+                        deporte.getText(),
+                        descripcion.getText(),
+                        disponible.isSelected()
+                );
 
-                else showInfo("Error al dar de alta la pista.");
+                club.altaPista(pista);
 
-                // Limpiar el formulario para permitir añadir otra pista sin borrar a mano
+                showInfo("Pista creada correctamente");
+
+                // limpiar formulario
                 id.clear();
                 deporte.clear();
                 descripcion.clear();
                 disponible.setSelected(false);
-            } catch (Exception ex) {
-                showError(ex.getMessage());
+
             }
+            catch (Exception ex) {
+
+                showError(ex.getMessage());
+
+            }
+
         });
+
     }
 
     private void showError(String msg) {
+
         Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         a.setHeaderText("Error");
         a.showAndWait();
+
     }
+
     private void showInfo(String msg) {
+
         Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
         a.setHeaderText(null);
         a.showAndWait();
+
     }
+
 }
