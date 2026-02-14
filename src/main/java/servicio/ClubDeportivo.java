@@ -42,4 +42,26 @@ public class ClubDeportivo {
 
     }
 
+
+    public void altaPista(Pista pista) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // comprobar si ya existe
+            Pista existente = em.find(Pista.class, pista.getIdPista());
+
+            if (existente != null) {
+                throw new Exception("Ya existe una pista con ese ID");
+            }
+            em.persist(pista);
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+            throw e;
+        }finally {
+            em.close();
+        }
+    }
+
 }
