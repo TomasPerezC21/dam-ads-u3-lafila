@@ -1,10 +1,10 @@
 package servicio;
 
 import Entidades.*;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
+
+import java.util.List;
+
 
 public class ClubDeportivo {
 
@@ -165,5 +165,33 @@ public class ClubDeportivo {
         }
 
     }
+    public void bajaSocio(String dni) throws Exception {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            Socio socio = em.find(Socio.class, dni);
+            if (socio == null) {
+                throw new Exception("El socio no existe");
+            }
+            // comprobar si tiene reservas
+            if (socio.getReservas() != null && !socio.getReservas().isEmpty()) {
+                throw new Exception("No se puede eliminar el socio porque tiene reservas");
+            }
+            em.remove(socio);
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception e) {
+            throw e;
+
+        }
+    }
+
+
+
+
+
+
 
 }

@@ -1,11 +1,14 @@
 package vista.views;
 
-import modelo.*;
+import Entidades.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import servicio.ClubDeportivo;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SocioFormView extends GridPane {
@@ -63,4 +66,7 @@ public class SocioFormView extends GridPane {
         a.setHeaderText(null);
         a.showAndWait();
     }
+    @OneToMany(mappedBy = "idSocio", cascade = CascadeType.ALL)
+    private List<Reserva> reservas;
+
 }

@@ -1,6 +1,6 @@
 package vista.views;
 
-import modelo.*;
+import Entidades.*;
 import servicio.ClubDeportivo;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;

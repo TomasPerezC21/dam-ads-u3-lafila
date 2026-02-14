@@ -1,12 +1,12 @@
 package Entidades;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
 @Table(name = "socios", schema = "club_dama")
 public class Socio {
+
     @Id
     @Column(name = "id_socio", nullable = false, length = 36)
     private String idSocio;
@@ -27,8 +27,23 @@ public class Socio {
     private String email;
 
     @OneToMany(mappedBy = "idSocio", cascade = CascadeType.ALL)
-
     private List<Reserva> reservas;
+
+// constructor vacio obligatorio para hibernate
+    public Socio() {
+    }
+
+    // CONSTRUCTOR COMPLETO (el que usa tu formulario)
+    public Socio(String idSocio, String dni, String nombre, String apellidos, String telefono, String email) {
+        this.idSocio = idSocio;
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.email = email;
+    }
+
+
 
     public String getIdSocio() {
         return idSocio;
@@ -78,4 +93,17 @@ public class Socio {
         this.email = email;
     }
 
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+
+
+    @Override
+    public String toString() {
+        return nombre + " (" + dni + ")";
+    }
 }
