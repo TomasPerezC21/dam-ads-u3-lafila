@@ -35,7 +35,7 @@ public class Reserva {
     private double precio;
 
 
-    // constructor VACÍO obligatorio JPA
+    // constructor VACÍO
     public Reserva() {
     }
 
@@ -54,7 +54,7 @@ public class Reserva {
         this.horaInicio = horaInicio;
         this.precio = precio;
 
-        // duración por defecto (puedes cambiarlo)
+        // duración por defecto
         this.duracionMin = 60;
     }
 

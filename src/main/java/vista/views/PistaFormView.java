@@ -58,29 +58,22 @@ public class PistaFormView extends GridPane {
 
             }
             catch (Exception ex) {
-
                 showError(ex.getMessage());
-
             }
-
         });
 
     }
 
     private void showError(String msg) {
-
         Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         a.setHeaderText("Error");
         a.showAndWait();
-
     }
 
     private void showInfo(String msg) {
-
         Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
         a.setHeaderText(null);
         a.showAndWait();
-
     }
 
 }

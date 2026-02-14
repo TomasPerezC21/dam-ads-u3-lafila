@@ -68,9 +68,7 @@ public class SocioFormView extends GridPane {
 
             }
             catch (Exception ex) {
-
                 showError(ex.getMessage());
-
             }
 
         });
@@ -78,7 +76,6 @@ public class SocioFormView extends GridPane {
     }
 
     private void showError(String msg) {
-
         Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         a.setHeaderText("Error");
         a.showAndWait();
@@ -86,7 +83,6 @@ public class SocioFormView extends GridPane {
     }
 
     private void showInfo(String msg) {
-
         Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
         a.setHeaderText(null);
         a.showAndWait();

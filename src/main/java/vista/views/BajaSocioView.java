@@ -40,9 +40,7 @@ public class BajaSocioView extends GridPane {
             } catch (Exception ex) {
                 showError(ex.getMessage());
             }
-
         });
-
     }
 
     private void showError(String msg) {

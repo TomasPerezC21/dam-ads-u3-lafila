@@ -29,19 +29,15 @@ public class CambiarDisponibilidadView extends GridPane {
 
         cambiar.setOnAction(e -> {
             try {
-                // 1. Obtener el objeto Pista seleccionado del desplegable
                 Pista pistaSeleccionada = id.getValue();
 
-                // 2. Verificar que no sea nulo (que el usuario haya elegido algo)
                 if (pistaSeleccionada == null) {
                     showError("Por favor, selecciona una pista.");
                     return;
                 }
 
-                // 3. Sacar el ID (String) del objeto Pista
                 String idString = pistaSeleccionada.getIdPista();
 
-                // 4. Llamar al metodo usando ese String
                 boolean exito = club.cambiarDisponibilidadPista(idString, disponible.isSelected());
 
                 if (exito) {

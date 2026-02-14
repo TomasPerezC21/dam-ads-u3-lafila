@@ -192,16 +192,12 @@ public class ClubDeportivo {
         }
     }
 
-    // ---------------- RESERVAS ----------------
 
     public void crearReserva(Reserva reserva) throws Exception {
-
         EntityManager em = emf.createEntityManager();
 
         try {
-
             em.getTransaction().begin();
-
             // Buscar socio por su ID
             Socio socio = em.find(Socio.class, reserva.getIdSocio().getIdSocio());
 
@@ -223,20 +219,16 @@ public class ClubDeportivo {
             reserva.setIdPista(pista);
 
             em.persist(reserva);
-
             em.getTransaction().commit();
 
         } catch (Exception e) {
             throw e;
         } finally {
-
             em.close();
-
         }
     }
 
     public boolean cancelarReserva(String idReserva) throws Exception {
-
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -249,7 +241,6 @@ public class ClubDeportivo {
                 return false;
 
             em.remove(reserva);
-
             em.getTransaction().commit();
 
             return true;
@@ -262,18 +253,14 @@ public class ClubDeportivo {
             throw e;
 
         } finally {
-
             em.close();
-
         }
     }
 
     public List<Reserva> getReservas() {
 
         EntityManager em = emf.createEntityManager();
-
         try {
-
             return em.createQuery(
                             "SELECT r FROM Reserva r " +
                                     "JOIN FETCH r.idSocio " +
@@ -282,9 +269,7 @@ public class ClubDeportivo {
                     .getResultList();
 
         } finally {
-
             em.close();
-
         }
     }
 }

@@ -46,7 +46,6 @@ public class ReservaFormView extends GridPane {
 
         crear.setOnAction(e -> {
             try {
-
                 if (idSocio.getValue() == null || idPista.getValue() == null || fecha.getValue() == null) {
                     showError("Faltan datos obligatorios");
                     return;
@@ -78,11 +77,9 @@ public class ReservaFormView extends GridPane {
                 showError(ex.getMessage());
             }
         });
-
     }
 
     private void showError(String msg) {
-
         Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         a.setHeaderText("Error");
         a.showAndWait();
@@ -90,7 +87,6 @@ public class ReservaFormView extends GridPane {
     }
 
     private void showInfo(String msg) {
-
         Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
         a.setHeaderText(null);
         a.showAndWait();
