@@ -202,18 +202,22 @@ public class ClubDeportivo {
 
             em.getTransaction().begin();
 
+            // Buscar socio por su ID
             Socio socio = em.find(Socio.class, reserva.getIdSocio().getIdSocio());
 
-            if (socio == null)
+            if (socio == null) {
                 throw new Exception("El socio no existe");
+            }
 
             Pista pista = em.find(Pista.class, reserva.getIdPista().getIdPista());
 
-            if (pista == null)
+            if (pista == null) {
                 throw new Exception("La pista no existe");
+            }
 
-            if (!pista.getDisponible())
+            if (!pista.getDisponible()) {
                 throw new Exception("La pista no está disponible");
+            }
 
             reserva.setIdSocio(socio);
             reserva.setIdPista(pista);
@@ -223,12 +227,7 @@ public class ClubDeportivo {
             em.getTransaction().commit();
 
         } catch (Exception e) {
-
-            if (em.getTransaction().isActive())
-                em.getTransaction().rollback();
-
             throw e;
-
         } finally {
 
             em.close();

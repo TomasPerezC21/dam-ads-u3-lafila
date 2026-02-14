@@ -10,53 +10,102 @@ import java.time.LocalTime;
 public class Reserva {
 
     @Id
-    @Column(name = "id_reserva")
+    @Column(name = "id_reserva", nullable = false, length = 36)
     private String idReserva;
 
     @ManyToOne
-    @JoinColumn(name = "id_socio")
+    @JoinColumn(name = "id_socio", nullable = false)
     private Socio idSocio;
 
     @ManyToOne
-    @JoinColumn(name = "id_pista")
+    @JoinColumn(name = "id_pista", nullable = false)
     private Pista idPista;
 
+    @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
 
-    @Column(name = "hora_inicio")
+    @Column(name = "hora_inicio", nullable = false)
     private LocalTime horaInicio;
 
-    @Column(name = "duracion_min")
+    @Column(name = "duracion_min", nullable = false)
     private int duracionMin;
 
+    @Column(name = "precio", nullable = false)
     private double precio;
 
-    public Reserva() {}
+    public Reserva() {
+    }
 
-    public Reserva(String idReserva, Socio socio, Pista pista,
+    public Reserva(String idReserva, Socio idSocio, Pista idPista,
                    LocalDate fecha, LocalTime horaInicio,
                    int duracionMin, double precio) {
-
         this.idReserva = idReserva;
-        this.idSocio = socio;
-        this.idPista = pista;
+        this.idSocio = idSocio;
+        this.idPista = idPista;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.duracionMin = duracionMin;
         this.precio = precio;
     }
 
-    public String getIdReserva() { return idReserva; }
+    public String getIdReserva() {
+        return idReserva;
+    }
 
-    public Socio getIdSocio() { return idSocio; }
+    public void setIdReserva(String idReserva) {
+        this.idReserva = idReserva;
+    }
 
-    public Pista getIdPista() { return idPista; }
+    public Socio getIdSocio() {
+        return idSocio;
+    }
 
-    public LocalDate getFecha() { return fecha; }
+    public void setIdSocio(Socio idSocio) {
+        this.idSocio = idSocio;
+    }
 
-    public LocalTime getHoraInicio() { return horaInicio; }
+    public Pista getIdPista() {
+        return idPista;
+    }
 
-    public int getDuracionMin() { return duracionMin; }
+    public void setIdPista(Pista idPista) {
+        this.idPista = idPista;
+    }
 
-    public double getPrecio() { return precio; }
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalTime getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public int getDuracionMin() {
+        return duracionMin;
+    }
+
+    public void setDuracionMin(int duracionMin) {
+        this.duracionMin = duracionMin;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    @Override
+    public String toString() {
+        return idReserva + " - " + idPista.getDeporte();
+    }
 }
