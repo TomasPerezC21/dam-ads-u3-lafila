@@ -1,32 +1,26 @@
 package servicio;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import Entidades.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 public class ClubDeportivo {
-    private Connection conexion;
 
-    public ClubDeportivo() throws SQLException {
-        conexion= DriverManager.getConnection("jdbc:mysql://localhost:3306/club_dama",
-                "root","alumno");
+    private EntityManagerFactory emf;
+
+    public ClubDeportivo() {
+        emf = Persistence.createEntityManagerFactory("clubDamaPU");
     }
 
-    public ArrayList<Socio> getSocios() {
-        ArrayList<Socio> socios = new ArrayList<>();
-        return socios;
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
 
-    public ArrayList<Pista> getPistas() {
-        ArrayList<Pista> pistas = new ArrayList<>();
-        return pistas;
+    public void cerrar() {
+        if (emf != null && emf.isOpen()) {
+            emf.close();
+        }
     }
 
-    public ArrayList<Reserva> getReservas() {
-        ArrayList<Reserva> reservas = new ArrayList<>();
-        return reservas;
-    }
 }
